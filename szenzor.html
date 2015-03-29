@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Accelerometer Javascript Test</title>
+    <meta name="viewport" content="width=device-width,user-scalable=yes" />
+
+    <script type="text/javascript">
+            var i=0;
+ 			// --- Accelerometer and Rotation
+            if (window.DeviceMotionEvent != undefined) {
+                window.ondevicemotion = function (e) {
+                    document.getElementById("accelerationX").innerHTML = e.accelerationIncludingGravity.x;
+                    document.getElementById("accelerationY").innerHTML = e.accelerationIncludingGravity.y;
+                    document.getElementById("accelerationZ").innerHTML = e.accelerationIncludingGravity.z;
+                    if (e.rotationRate) {
+                        document.getElementById("rotationAlpha").innerHTML = e.rotationRate.alpha;
+                        document.getElementById("rotationBeta").innerHTML = e.rotationRate.beta;
+                        document.getElementById("rotationGamma").innerHTML = e.rotationRate.gamma;
+                    }
+                }
+            }
+
+			// --- Light sensor
+            window.addEventListener('devicelight', function(e) {
+            	document.getElementById("lightSensor").innerHTML = e.value;
+			});
+
+			// --- Proximity
+			window.addEventListener('deviceproximity', function(e) {
+			   document.getElementById("proximity").innerHTML = e.value;
+			});
+
+
+            // --- GeoLocation
+            if (navigator.geolocation) {
+			  navigator.geolocation.getCurrentPosition(success, fail);
+			}
+
+			function success(position) {
+				document.getElementById("geoLocation").innerHTML = 'Latitude: '+ position.coords.latitude + ', Longitude: '+ position.coords.longitude;
+			}
+
+			function fail() {
+				alert('No gelocation device');
+			}
+
+			// --- Battery
+			var battery = navigator.battery || navigator.mozBattery;
+
+			if (battery != null) {
+				battery.addEventListener('chargingchange', updateStatus);  
+			}
+
+			function updateStatus() { 
+			  document.getElementById("battery").innerHTML = ' ' + battery.level * 100 + ' %';
+			  if (battery.charging) {
+			    alert('Phone is charging');   
+			  }
+			}  
+
+            var myVar=setInterval(function () {refresh()}, 30);
+
+            function refresh(){
+                document.getElementById("battery").innerHTML = i++;
+            }
+
+
+        </script>
+
+</head>
+
+<body>
+<div id="content">
+
+    <h1>Mobile HTML sensor test</h1>
+
+    <div id="sphere"></div>
+    <ul>
+        <li>acceleration x: <span id="accelerationX"></span>g</li>
+        <li>acceleration y: <span id="accelerationY"></span>g</li>
+        <li>acceleration z: <span id="accelerationZ"></span>g</li>
+        <li>rotation alpha: <span id="rotationAlpha"></span>degree</li>
+        <li>rotation beta: <span id="rotationBeta"></span>degree</li>
+        <li>rotation gamma: <span id="rotationGamma"></span>degree</li>
+        <li>Light sensor: <span id="lightSensor">a</span>lux</li>
+        <li>Proximity: <span id="proximity">a</span></li>
+        <li>GeoLocation: <span id="geoLocation">a</span></li>
+        <li>Battery status: <span id="battery">a</span></li>
+        <li>I: <span id="refreshed"></span>a</li>
+    </ul>
+    <br/>
+    <br/>
+    <a href="tel:+36304892111">
+        Example call
+    </a>
+    <br/>
+    <br/>
+    <a href="sms:+36304892111?body=Test mobile html message">
+        Example SMS
+    </a>
+
+
+</div>
+
+</body>
+
+</html>
